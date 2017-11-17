@@ -12,15 +12,17 @@ import random
 
 
 print("Init - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-GPIO.setmode(GPIO.BCM)
 #set GPIO Pins
+GPIO.setmode(GPIO.BCM)
 GPIO_TRIGGER = 22
 GPIO_ECHO = 24
 GPIO_PIR = 23
+GPIO_LED = 16
 #set GPIO direction (IN / OUT)
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)#ULTRASOUND TRIGGER
+GPIO.setup(GPIO_ECHO, GPIO.IN)#ULTRASOUND ECHO
 GPIO.setup(GPIO_PIR, GPIO.IN) #PIR
+GPIO.setup(GPIO_LED, GPIO.OUT) #LED
 
 pygame.camera.init()
 cam = pygame.camera.Camera("/dev/video0",(1920,1080))
@@ -63,8 +65,8 @@ def capture(count, flip):
         img = pygame.transform.flip(img,False,True)
     pygame.image.save(img,filename)
     print("Saving image {}... - {}".format(filename,strftime("%Y-%m-%d %H:%M:%S", gmtime())))
-    
-    send_to_watson(filename)
+    blink_led()
+    #send_to_watson(filename)
     
 def send_to_watson(image):
     print("Retrieving image file... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
@@ -74,20 +76,29 @@ def send_to_watson(image):
         print(json.dumps(result, indent=2))
         print("Recieving from Watson... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
         return result;
+def turn_led_on():
+    GPIO.output(GPIO_LED,True)
+
+def blink_led():
+    GPIO.output(GPIO_LED,False)
+    time.sleep(0.1)
+    GPIO.output(GPIO_LED,True)
 
 try:
     time.sleep(2)
+    turn_led_on()
     count = 1
     while True:
         if GPIO.input(GPIO_PIR):
             print("Motion Detected - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-            dist = distance()
-            print ("Measured Distance = %.1f cm" % dist)
-            if dist >=30 and dist <= 100:
-                capture(count, False)                
-                count = count+1
-            time.sleep(1)
+            #dist = distance()
+            #print ("Measured Distance = %.1f cm" % dist)
+            #if dist >=30 and dist <= 100:
+            capture(count, True)                
+            count = count + 1
+            time.sleep(5)
 
 except:
+    print("Ending... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
     GPIO.cleanup()
     cam.stop()
