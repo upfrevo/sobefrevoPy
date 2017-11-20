@@ -6,10 +6,7 @@ import pygame.camera
 import json
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
-from datetime import datetime
-import sys
-import random
-
+#from datetime import datetime
 
 print("Init - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 #set GPIO Pins
@@ -58,15 +55,15 @@ def distance():
     return distance
 
 def capture(count, flip):    
-    print("Capturing... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    print("Taking Picture... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
     filename = './samples/sample{}.jpg'.format(count)
     img = cam.get_image()
     if flip == True:
         img = pygame.transform.flip(img,False,True)
     pygame.image.save(img,filename)
-    print("Saving image {}... - {}".format(filename,strftime("%Y-%m-%d %H:%M:%S", gmtime())))
+    print("Saving Image {}... - {}".format(filename,strftime("%Y-%m-%d %H:%M:%S", gmtime())))
     blink_led()
-    #send_to_watson(filename)
+    send_to_watson(filename)
     
 def send_to_watson(image):
     print("Retrieving image file... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
