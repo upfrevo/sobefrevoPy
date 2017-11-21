@@ -1,3 +1,5 @@
+import os, random
+
 # utilizando  o json de resposta
 
 #result = visual_recognition.classify(images_file=image_file, threshold=0, classifier_ids=['Grupo_1351703499','Cores_741726174'])
@@ -71,17 +73,17 @@ def getKey(result):
     
     coresKey = ""
     grupoKey = ""
-    objetoKey = ""
+    objetoKey = "Despojado"
     coresClasses = result['images'][0]['classifiers'][0]['classes']
     grupoClasses = result['images'][0]['classifiers'][1]['classes']
     
-    # get Cores
-    
-    coresKey = getCor(coresClasses)        
-    
+    # get Cores    
+    coresKey = getCor(coresClasses)            
     grupoKey = getGrupo(grupoClasses)
         
-    return "{0}_{1}".format(coresKey,grupoKey)
+    dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
+    musicas = os.listdir("audios/Musicas/" + dir)
+    
+    return random.choice(musicas)
 
 audioKey = getKey(result)
-print(audioKey)
