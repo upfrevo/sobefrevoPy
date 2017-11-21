@@ -6,6 +6,7 @@ import pygame.camera
 import json
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
+import LED
 #from datetime import datetime
 
 print("Init - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
@@ -94,6 +95,11 @@ try:
             capture(count, True)                
             count = count + 1
             time.sleep(2)
+            
+            #Chamando script de LED
+            LED.on()
+            LED.run('Quente_Grupo.txt') # adicionar o path do script
+            LED.off()
 
 except:
     print("Ending... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
