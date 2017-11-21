@@ -1,34 +1,40 @@
-import time 
-from beacontools import parse_packet 
+import time
+from beacontools import parse_packet
 from beacontools import BeaconScanner, IBeaconFilter
 import math
 
-def callback(bt_addr, rssi, packet, additional_info):
-    #adv = parse_packet(packet)
-    print(packet.tx_power)
-    print(rssi)
-    ratio = rssi * 1 /packet.tx_power
-    #print(ratio)
-    dist = -1
-    if ratio < 1.0:
-      dist = math.pow(ratio, 10)
-    else:
-      dist = (0.89976) * math.pow(ratio, 7.7095) + 0.111
-    
-    print(dist)
-    #if (ratio < 1.0) {
-    #   return Math.pow(ratio, 10);
-    #} else {
-    #   return (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
-    #}
-    #print("<%s, %d> %s %s" % (bt_addr, rssi, packet, additional_info))
-
-UUID_BLUE = "b9407f30-f5f8-466e-aff9-25556b57fe6d"
+UUID_BLUE =   "b9407f30-f5f8-466e-aff9-00012345678b"
 UUID_PURPLE = "b9407f30-f5f8-466e-aff9-25556b57fe6e"
+UUID_GREEN =  "b9407f30-f5f8-466e-aff9-0000025556b5"
+
+scanners = [BeaconScanner]*1
+
 # scan for all iBeacon advertisements from beacons with the specified uuid
-scanner = BeaconScanner(callback,
-    device_filter=IBeaconFilter(uuid=UUID_PURPLE)
-)
-scanner.start()
-time.sleep(5)
-scanner.stop()
+def init(UUIDS, callback):
+  scanners = [BeaconScanner]*len(UUIDS)
+  i = 0
+  for scanner in scanners:
+    scanner = BeaconScanner(callback,
+      device_filter=IBeaconFilter(uuid=UUIDS[i])
+    )
+    scanner.start()
+    i = i + 1
+
+def destroy():
+  for scanner in scanners:
+    scanner.stop()
+    
+
+#exemplo função de callback
+#def callback1(bt_addr, rssi, packet, additional_info):
+#    if packet.uuid == UUID_BLUE:
+#      print("Você está próximo do beacon blue")
+#    elif packet.uuid == UUID_PURPLE:
+#      print("Você está próximo do beacon purple")
+#    elif packet.uuid == UUID_GREEN:
+#      print("Você está próximo do beacon green")
+
+#exemplo de como utilizar
+#init([UUID_BLUE,UUID_GREEN,UUID_PURPLE],callback1)
+#time.sleep(100)
+#destroy()
