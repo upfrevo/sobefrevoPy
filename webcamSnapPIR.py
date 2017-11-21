@@ -63,7 +63,7 @@ def capture(count, flip):
     pygame.image.save(img,filename)
     print("Saving Image {}... - {}".format(filename,strftime("%Y-%m-%d %H:%M:%S", gmtime())))
     blink_led()
-    send_to_watson(filename)
+    #send_to_watson(filename)
     
 def send_to_watson(image):
     print("Retrieving image file... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
@@ -93,7 +93,7 @@ try:
             #if dist >=30 and dist <= 100:
             capture(count, True)                
             count = count + 1
-            time.sleep(5)
+            time.sleep(2)
 
 except:
     print("Ending... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
