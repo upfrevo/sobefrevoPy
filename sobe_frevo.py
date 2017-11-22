@@ -1,15 +1,19 @@
-import RPi.GPIO as GPIO
-import time
-from time import gmtime, strftime
-import pygame
+import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys
 import pygame.camera
-import json
+
+sys.path.insert(0, "libs")
+
+import audio as AUDIO
+import led as LED
+
+import classificador_conteudo as CC
+
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
-import led
+
 #from datetime import datetime
 
-print("Init - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+print("Init - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
 #set GPIO Pins
 GPIO.setmode(GPIO.BCM)
 GPIO_TRIGGER = 22
@@ -25,7 +29,7 @@ GPIO.setup(GPIO_LED, GPIO.OUT) #LED
 pygame.camera.init()
 cam = pygame.camera.Camera("/dev/video0",(1920,1080))
 cam.start()
-visual_recognition = VisualRecognitionV3('2016-05-20', api_key='e4b5f0635c00ae28629571bfadebdb651f00b4f2')
+visual_recognition = VisualRecognitionV3('2016-05-20', api_key='3c840f761086ca39e0a41c02bb8bf119f96f27ce')
 
 def distance():    
     GPIO.output(GPIO_TRIGGER, False)
@@ -56,24 +60,23 @@ def distance():
     return distance
 
 def capture(count, flip):    
-    print("Taking Picture... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    print("Taking Picture... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     filename = './samples/sample{}.jpg'.format(count)
     img = cam.get_image()
+    
     if flip == True:
         img = pygame.transform.flip(img,False,True)
+        
     pygame.image.save(img,filename)
-    print("Saving Image {}... - {}".format(filename,strftime("%Y-%m-%d %H:%M:%S", gmtime())))
+    print("Saving Image {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
     blink_led()
-    #send_to_watson(filename)
     
-def send_to_watson(image):
-    print("Retrieving image file... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    return send_to_watson(filename)
+    
+def send_to_watson(image):    
     with open(image, 'rb') as image_file:
-        print("Sending to Watson... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-        result = visual_recognition.classify(images_file=image_file)
-        print(json.dumps(result, indent=2))
-        print("Recieving from Watson... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-        return result;
+        parameters = json.dumps({'threshold': 0, 'classifier_ids': ['Grupo_1351703499','Cores_741726174']})
+        return visual_recognition.classify(images_file=image_file, parameters=parameters)
     
 def turn_led_on():
     GPIO.output(GPIO_LED,True)
@@ -83,26 +86,40 @@ def blink_led():
     time.sleep(0.1)
     GPIO.output(GPIO_LED,True)
 
-try:
-    time.sleep(2)
-    turn_led_on()
-    count = 1
-    while True:
-        if GPIO.input(GPIO_PIR):
-            print("Motion Detected - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-            #dist = distance()
-            #print ("Measured Distance = %.1f cm" % dist)
-            #if dist >=30 and dist <= 100:
-            capture(count, True)                
-            count = count + 1
-            time.sleep(2)
-            
-            #Chamando script de LED
-            led.on()
-            led.run('Quente_Grupo.txt') # adicionar o path do script
-            led.off()
+#try:
+time.sleep(2)
+turn_led_on()
+AUDIO.init(8)
+th = None
+count = 1
+while True:
+    if GPIO.input(GPIO_PIR):
+        print("Motion Detected - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+        #dist = distance()
+        #print ("Measured Distance = %.1f cm" % dist)
+        #if dist >=30 and dis,t <= 100:
+        watson_json = capture(count, True)
+        classificador = CC.getKey(watson_json)
+        print("Conteúdo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+        #try:
+        LED.off()
+        if (th != None):
+            th.terminate()
+        
+        AUDIO.stop_all()
+        AUDIO.prepare(classificador[0], classificador[1])
+        time.sleep(2)
+        AUDIO.play_trilha(True)
 
-except:
-    print("Ending... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-    GPIO.cleanup()
-    cam.stop()
+        th = multiprocessing.Process(target=LED.run, args = (classificador[2],))
+        th.start()
+
+        AUDIO.play_ruido(0, True)
+        count = count + 1
+        time.sleep(2)           
+            
+
+#except:
+    #print("Ending... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+GPIO.cleanup()
+cam.stop()
