@@ -38,8 +38,6 @@ def getKey(result):
     # get Cores    
     coresKey = getCor(coresClasses)            
     grupoKey = getGrupo(grupoClasses)
-    
-    print(coresClasses, grupoClasses)
         
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
     musicas = os.listdir("audios/Musicas/" + dir)

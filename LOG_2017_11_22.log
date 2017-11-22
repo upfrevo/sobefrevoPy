@@ -1,0 +1,273 @@
+INFO:root:Movimento Detectado - 2017-11-22 20:01:42
+INFO:root:Tirando Foto... - 2017-11-22 20:01:42
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:01:42
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:01:45
+INFO:root:Movimento Detectado - 2017-11-22 20:02:00
+INFO:root:Tirando Foto... - 2017-11-22 20:02:00
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:02:00
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:02:03
+INFO:root:Movimento Detectado - 2017-11-22 20:02:09
+INFO:root:Tirando Foto... - 2017-11-22 20:02:09
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:02:10
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:02:12
+INFO:root:Movimento Detectado - 2017-11-22 20:02:17
+INFO:root:Tirando Foto... - 2017-11-22 20:02:17
+INFO:root:Salvando Imagem ./samples/sample4.jpg... - 2017-11-22 20:02:18
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:02:20
+INFO:root:Movimento Detectado - 2017-11-22 20:02:37
+INFO:root:Tirando Foto... - 2017-11-22 20:02:37
+INFO:root:Salvando Imagem ./samples/sample5.jpg... - 2017-11-22 20:02:38
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:02:41
+INFO:root:Fim... - 2017-11-22 20:03:45
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "/home/pi/dev/sobefrevoPy/sobe_frevo.py", line 105, in <module>
+    if GPIO.input(GPIO_PIR):
+  File "/usr/lib/python3/dist-packages/thonny/shared/thonny/backend.py", line 133, in signal_handler
+    raise KeyboardInterrupt("Execution interrupted")
+KeyboardInterrupt: Execution interrupted
+INFO:root:Movimento Detectado - 2017-11-22 20:28:41
+INFO:root:Tirando Foto... - 2017-11-22 20:28:41
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:28:41
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:28:43
+INFO:root:Movimento Detectado - 2017-11-22 20:29:00
+INFO:root:Tirando Foto... - 2017-11-22 20:29:00
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:29:01
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:29:03
+INFO:root:Movimento Detectado - 2017-11-22 20:29:13
+INFO:root:Tirando Foto... - 2017-11-22 20:29:13
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:29:14
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:29:16
+INFO:root:Movimento Detectado - 2017-11-22 20:29:25
+INFO:root:Tirando Foto... - 2017-11-22 20:29:25
+INFO:root:Salvando Imagem ./samples/sample4.jpg... - 2017-11-22 20:29:25
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:29:28
+INFO:root:Movimento Detectado - 2017-11-22 20:29:55
+INFO:root:Tirando Foto... - 2017-11-22 20:29:55
+INFO:root:Salvando Imagem ./samples/sample5.jpg... - 2017-11-22 20:29:56
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:29:58
+INFO:root:Fim... - 2017-11-22 20:30:20
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 105, in <module>
+    if GPIO.input(GPIO_PIR):
+KeyboardInterrupt
+INFO:root:Movimento Detectado - 2017-11-22 20:33:03
+INFO:root:Tirando Foto... - 2017-11-22 20:33:03
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:33:04
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:33:07
+INFO:root:Movimento Detectado - 2017-11-22 20:33:50
+INFO:root:Tirando Foto... - 2017-11-22 20:33:50
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:33:50
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:33:53
+INFO:root:Movimento Detectado - 2017-11-22 20:34:28
+INFO:root:Tirando Foto... - 2017-11-22 20:34:28
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:34:28
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:34:31
+INFO:root:Movimento Detectado - 2017-11-22 20:34:51
+INFO:root:Tirando Foto... - 2017-11-22 20:34:51
+INFO:root:Salvando Imagem ./samples/sample4.jpg... - 2017-11-22 20:34:52
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:34:54
+INFO:root:Fim... - 2017-11-22 20:35:43
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 105, in <module>
+    if GPIO.input(GPIO_PIR):
+KeyboardInterrupt
+INFO:root:Fim... - 2017-11-22 20:41:12
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "/home/pi/dev/sobefrevoPy/sobe_frevo.py", line 114, in <module>
+    if GPIO.input(GPIO_PIR):
+KeyboardInterrupt
+INFO:root:Movimento Detectado - 2017-11-22 20:42:02
+INFO:root:Tirando Foto... - 2017-11-22 20:42:02
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:42:02
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:42:05
+INFO:root:Fim... - 2017-11-22 20:42:25
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 114, in <module>
+    if GPIO.input(GPIO_PIR):
+KeyboardInterrupt
+INFO:root:Movimento Detectado - 2017-11-22 20:42:42
+INFO:root:Tirando Foto... - 2017-11-22 20:42:42
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:42:42
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:42:44
+INFO:root:Movimento Detectado - 2017-11-22 20:42:49
+INFO:root:Tirando Foto... - 2017-11-22 20:42:49
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:42:49
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:42:52
+INFO:root:Movimento Detectado - 2017-11-22 20:43:00
+INFO:root:Tirando Foto... - 2017-11-22 20:43:00
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:43:00
+INFO:root:Fim... - 2017-11-22 20:43:03
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 119, in <module>
+    watson_json = capture(count, True)
+  File "sobe_frevo.py", line 73, in capture
+    return send_to_watson(filename)
+  File "sobe_frevo.py", line 78, in send_to_watson
+    return visual_recognition.classify(images_file=image_file, parameters=parameters)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/visual_recognition_v3.py", line 119, in classify
+    accept_json=True)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/watson_service.py", line 409, in request
+    error_info)
+watson_developer_cloud.watson_service.WatsonApiException: Error: No valid images uploaded to process, Code: 400
+INFO:root:Movimento Detectado - 2017-11-22 20:46:34
+INFO:root:Tirando Foto... - 2017-11-22 20:46:34
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:46:35
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:46:37
+INFO:root:Movimento Detectado - 2017-11-22 20:46:43
+INFO:root:Tirando Foto... - 2017-11-22 20:46:43
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:46:44
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:46:46
+INFO:root:Movimento Detectado - 2017-11-22 20:46:52
+INFO:root:Tirando Foto... - 2017-11-22 20:46:52
+INFO:root:Fim... - 2017-11-22 20:46:53
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 119, in <module>
+    watson_json = capture(count, True)
+  File "sobe_frevo.py", line 69, in capture
+    pygame.image.save(img,filename)
+KeyboardInterrupt
+INFO:root:Movimento Detectado - 2017-11-22 20:54:39
+INFO:root:Tirando Foto... - 2017-11-22 20:54:39
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:54:39
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:54:42
+INFO:root:Movimento Detectado - 2017-11-22 20:54:56
+INFO:root:Tirando Foto... - 2017-11-22 20:54:56
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:54:56
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:54:59
+INFO:root:Movimento Detectado - 2017-11-22 20:55:11
+INFO:root:Tirando Foto... - 2017-11-22 20:55:11
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:55:12
+INFO:root:Fim... - 2017-11-22 20:55:14
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 380, in _make_request
+    httplib_response = conn.getresponse(buffering=True)
+TypeError: getresponse() got an unexpected keyword argument 'buffering'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 121, in <module>
+    watson_json = capture(count, True)
+  File "sobe_frevo.py", line 73, in capture
+    return send_to_watson(filename)
+  File "sobe_frevo.py", line 78, in send_to_watson
+    return visual_recognition.classify(images_file=image_file, parameters=parameters)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/visual_recognition_v3.py", line 119, in classify
+    accept_json=True)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/watson_service.py", line 382, in request
+    **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/api.py", line 58, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/adapters.py", line 440, in send
+    timeout=timeout
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 601, in urlopen
+    chunked=chunked)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 383, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/lib/python3.5/http/client.py", line 1198, in getresponse
+    response.begin()
+  File "/usr/lib/python3.5/http/client.py", line 297, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.5/http/client.py", line 258, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/lib/python3.5/socket.py", line 576, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/contrib/pyopenssl.py", line 280, in recv_into
+    return self.connection.recv_into(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/OpenSSL/SSL.py", line 1334, in recv_into
+    result = _lib.SSL_read(self._ssl, buf, nbytes)
+KeyboardInterrupt
+INFO:root:Movimento Detectado - 2017-11-22 20:57:33
+INFO:root:Tirando Foto... - 2017-11-22 20:57:33
+INFO:root:Salvando Imagem ./samples/sample1.jpg... - 2017-11-22 20:57:34
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:57:36
+INFO:root:Movimento Detectado - 2017-11-22 20:57:55
+INFO:root:Tirando Foto... - 2017-11-22 20:57:55
+INFO:root:Salvando Imagem ./samples/sample2.jpg... - 2017-11-22 20:57:56
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:57:58
+INFO:root:Movimento Detectado - 2017-11-22 20:58:03
+INFO:root:Tirando Foto... - 2017-11-22 20:58:03
+INFO:root:Salvando Imagem ./samples/sample3.jpg... - 2017-11-22 20:58:03
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:58:06
+INFO:root:Movimento Detectado - 2017-11-22 20:58:14
+INFO:root:Tirando Foto... - 2017-11-22 20:58:14
+INFO:root:Salvando Imagem ./samples/sample4.jpg... - 2017-11-22 20:58:14
+INFO:root:Conteúdo Selecionado - 2017-11-22 20:58:17
+INFO:root:Movimento Detectado - 2017-11-22 20:58:32
+INFO:root:Tirando Foto... - 2017-11-22 20:58:32
+INFO:root:Salvando Imagem ./samples/sample5.jpg... - 2017-11-22 20:58:32
+INFO:root:Fim... - 2017-11-22 20:58:33
+ERROR:root:Erro catastrófico
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/contrib/pyopenssl.py", line 441, in wrap_socket
+    cnx.do_handshake()
+  File "/usr/lib/python3/dist-packages/OpenSSL/SSL.py", line 1426, in do_handshake
+    self._raise_ssl_error(self._ssl, result)
+  File "/usr/lib/python3/dist-packages/OpenSSL/SSL.py", line 1174, in _raise_ssl_error
+    _raise_current_error()
+  File "/usr/lib/python3/dist-packages/OpenSSL/_util.py", line 48, in exception_from_error_queue
+    raise exception_type(errors)
+OpenSSL.SSL.Error: [('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 601, in urlopen
+    chunked=chunked)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 346, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 850, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connection.py", line 326, in connect
+    ssl_context=context)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/util/ssl_.py", line 329, in ssl_wrap_socket
+    return context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/contrib/pyopenssl.py", line 448, in wrap_socket
+    raise ssl.SSLError('bad handshake: %r' % e)
+ssl.SSLError: ("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/requests/adapters.py", line 440, in send
+    timeout=timeout
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/connectionpool.py", line 639, in urlopen
+    _stacktrace=sys.exc_info()[2])
+  File "/usr/local/lib/python3.5/dist-packages/urllib3/util/retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='gateway-a.watsonplatform.net', port=443): Max retries exceeded with url: /visual-recognition/api/v3/classify?version=2016-05-20&api_key=3c840f761086ca39e0a41c02bb8bf119f96f27ce (Caused by SSLError(SSLError("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",),))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "sobe_frevo.py", line 121, in <module>
+    watson_json = capture(count, True)
+  File "sobe_frevo.py", line 73, in capture
+    return send_to_watson(filename)
+  File "sobe_frevo.py", line 78, in send_to_watson
+    return visual_recognition.classify(images_file=image_file, parameters=parameters)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/visual_recognition_v3.py", line 119, in classify
+    accept_json=True)
+  File "/usr/local/lib/python3.5/dist-packages/watson_developer_cloud/watson_service.py", line 382, in request
+    **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/api.py", line 58, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.5/dist-packages/requests/adapters.py", line 506, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='gateway-a.watsonplatform.net', port=443): Max retries exceeded with url: /visual-recognition/api/v3/classify?version=2016-05-20&api_key=3c840f761086ca39e0a41c02bb8bf119f96f27ce (Caused by SSLError(SSLError("bad handshake: Error([('SSL routines', 'tls_process_server_certificate', 'certificate verify failed')],)",),))

@@ -1,15 +1,14 @@
-import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys
-import pygame.camera
-
-sys.path.insert(0, "libs")
-
-import audio as AUDIO
-import led as LED
-
-import classificador_conteudo as CC
-
+import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys, pygame.camera, logging, logging.handlers, os
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
+
+sys.path.insert(0, "libs")
+#libs
+import audio as AUDIO
+import led as LED
+import classificador_conteudo as CC
+import beacon as BEACONS
+
 
 #from datetime import datetime
 
@@ -60,15 +59,15 @@ def distance():
     return distance
 
 def capture(count, flip):    
-    print("Taking Picture... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    logging.info("Tirando Foto... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     filename = './samples/sample{}.jpg'.format(count)
     img = cam.get_image()
     
     if flip == True:
         img = pygame.transform.flip(img,False,True)
         
-    pygame.image.save(img,filename)
-    print("Saving Image {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
+    pygame.image.save(img,filename)    
+    logging.info("Salvando Imagem {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
     blink_led()
     
     return send_to_watson(filename)
@@ -86,40 +85,66 @@ def blink_led():
     time.sleep(0.1)
     GPIO.output(GPIO_LED,True)
 
-#try:
-time.sleep(2)
-turn_led_on()
-AUDIO.init(8)
-th = None
-count = 1
-while True:
-    if GPIO.input(GPIO_PIR):
-        print("Motion Detected - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-        #dist = distance()
-        #print ("Measured Distance = %.1f cm" % dist)
-        #if dist >=30 and dis,t <= 100:
-        watson_json = capture(count, True)
-        classificador = CC.getKey(watson_json)
-        print("Conteúdo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-        #try:
-        LED.off()
-        if (th != None):
-            th.terminate()
-        
-        AUDIO.stop_all()
-        AUDIO.prepare(classificador[0], classificador[1])
-        time.sleep(2)
-        AUDIO.play_trilha(True)
+def setup_log():
+    handler = logging.handlers.WatchedFileHandler(
+    os.environ.get("LOGFILE", "LOG{}.log".format(time.strftime("_%Y_%m_%d"))))
+    formatter = logging.Formatter(logging.BASIC_FORMAT)
+    handler.setFormatter(formatter)
+    root = logging.getLogger()
+    root.setLevel(os.environ.get("LOGLEVEL", "INFO"))
+    root.addHandler(handler)
 
-        th = multiprocessing.Process(target=LED.run, args = (classificador[2],))
-        th.start()
+def callback_beacons(bt_addr, rssi, packet, additional_info):
+    if packet.uuid == BEACONS.UUID_BLUE:
+      print("Você está no andar térreo")
+    elif packet.uuid == BEACONS.UUID_PURPLE:
+      print("Você está no terceiro andar")
+    elif packet.uuid == BEACONS.UUID_GREEN:
+      print("Você está no primeiro andar")
+    elif packet.uuid == BEACONS.UUID_BISCUI:
+      print("Você está no biscui")
 
-        AUDIO.play_ruido(0, True)
-        count = count + 1
-        time.sleep(2)           
-            
+try:
+    time.sleep(2)
+    turn_led_on()
+    AUDIO.init(8)
+    BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
+    setup_log()
+    th = None
+    count = 1
+    while True:
+        if GPIO.input(GPIO_PIR):            
+            logging.info("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+            #dist = distance()
+            #print ("Measured Distance = %.1f cm" % dist)
+            #if dist >=30 and dis,t <= 100:
+            watson_json = capture(count, True)
+            classificador = CC.getKey(watson_json)
+            logging.info("Conteúdo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))            
+                
+            try:                
+                if (th != None):
+                    th.terminate()
+                LED.off()
+                AUDIO.stop_all()
+                AUDIO.prepare(classificador[0], classificador[1])
+                time.sleep(2)
+                LED.on()
+                AUDIO.play_trilha(True)
 
-#except:
-    #print("Ending... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-GPIO.cleanup()
-cam.stop()
+                th = multiprocessing.Process(target=LED.run, args = (classificador[2],))
+                th.start()
+
+                AUDIO.play_ruido(0, True)
+                count = count + 1
+                time.sleep(2)
+            except:
+                logging.exception('Erro ao executar exibição de conteúdo!')
+                
+except:    
+    logging.info("Fim... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    logging.exception('Erro catastrófico')
+    GPIO.cleanup()
+    cam.stop()
+    LED.off()
+    BEACONS.destroy()
