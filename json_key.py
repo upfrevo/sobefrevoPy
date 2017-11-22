@@ -87,3 +87,4 @@ def getKey(result):
     return random.choice(musicas)
 
 audioKey = getKey(result)
+print(audioKey)

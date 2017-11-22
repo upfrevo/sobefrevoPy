@@ -6,7 +6,7 @@ import pygame.camera
 import json
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
-import LED
+import led
 #from datetime import datetime
 
 print("Init - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
@@ -97,9 +97,9 @@ try:
             time.sleep(2)
             
             #Chamando script de LED
-            LED.on()
-            LED.run('Quente_Grupo.txt') # adicionar o path do script
-            LED.off()
+            led.on()
+            led.run('Quente_Grupo.txt') # adicionar o path do script
+            led.off()
 
 except:
     print("Ending... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
