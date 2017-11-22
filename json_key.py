@@ -94,7 +94,7 @@ def getKey(result):
     efeito_led = getEfeitoLed(dir)    
     print(efeito_led)
     musica = "audios/Musicas/" + dir + "/" + random.choice(musicas)
-    ruidos = random.sample(lista_ruidos, 2);
+    ruidos = random.sample(lista_ruidos, 1);
     concat_ruidos = []
     
     for ruido in ruidos:
@@ -108,12 +108,11 @@ audio_key = getKey(result)
 
 #try:
 AUDIO.init(3)
-AUDIO.prepare(audio_key[0], audio_key[1])
+AUDIO.prepare(audio_key[0], audio_key[0])
 AUDIO.play_trilha(True)
 LED.run(audio_key[2])
 AUDIO.play_ruido(0, True)
-AUDIO.play_ruido(1, True)
-#AUDIO.play_ruido_random()    
+#AUDIO.play_ruido_random()
 #except:
     #print('erro')
     
