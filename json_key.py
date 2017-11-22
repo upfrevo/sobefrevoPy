@@ -1,6 +1,8 @@
 import os, random, sys
 sys.path.insert(0, "libs")
+
 import audio as AUDIO
+import led as LED
 
 # utilizando  o json de resposta
 result = {
@@ -49,6 +51,10 @@ result = {
 
 dir = ""
 
+def getEfeitoLed(dir):    
+    lista_efeitos = os.listdir("efeitos_led/" + dir)
+    return "efeitos_led/" + dir + "/" + random.choice(lista_efeitos);
+
 def getCor(coresClasses):
     cor = ""
     if coresClasses[0]['score'] >= coresClasses[1]['score']:
@@ -85,25 +91,29 @@ def getKey(result):
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
     musicas = os.listdir("audios/Musicas/" + dir)
     lista_ruidos = os.listdir("audios/Ruidos/")
-    
+    efeito_led = getEfeitoLed(dir)    
+    print(efeito_led)
     musica = "audios/Musicas/" + dir + "/" + random.choice(musicas)
-    ruidos = random.sample(lista_ruidos, 1);
+    ruidos = random.sample(lista_ruidos, 2);
     concat_ruidos = []
     
     for ruido in ruidos:
         concat_ruidos.append("audios/Ruidos/" + ruido)
+        
+    print(concat_ruidos)
     
-    return [musica, concat_ruidos]
+    return [musica, concat_ruidos, efeito_led]
 
 audio_key = getKey(result)
 
-try:
-    AUDIO.init(3)
-    AUDIO.prepare(audio_key[0], audio_key[1])
-    AUDIO.play_trilha(True)
-    AUDIO.play_ruido(0, True)
-    AUDIO.play_ruido_random()
-    
-except:
-    print('erro')
+#try:
+AUDIO.init(3)
+AUDIO.prepare(audio_key[0], audio_key[1])
+AUDIO.play_trilha(True)
+LED.run(audio_key[2])
+AUDIO.play_ruido(0, True)
+AUDIO.play_ruido(1, True)
+#AUDIO.play_ruido_random()    
+#except:
+    #print('erro')
     

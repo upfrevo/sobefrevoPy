@@ -74,6 +74,7 @@ def send_to_watson(image):
         print(json.dumps(result, indent=2))
         print("Recieving from Watson... - " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
         return result;
+    
 def turn_led_on():
     GPIO.output(GPIO_LED,True)
 

@@ -38,9 +38,9 @@ def get_indice_ruido(caminho_ruido):
 def play_ruido(indice, force_play):
     if force_play == True:
         canais_ruidos[indice].stop()
-    sons_tocados.append(indice) 
-    if not som_tocando(indice):
-        canais_ruidos[indice].play(sons_ruidos[indice])
+    #sons_tocados.append(indice) 
+    #if not som_tocando(indice):
+    canais_ruidos[indice].play(sons_ruidos[indice])
 
 def play_ruido_random():
     indice = random.randint(0, get_quantidade_ruidos() - 1)
