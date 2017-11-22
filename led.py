@@ -13,5 +13,3 @@ def on():
     
 def off():
     subprocess.call("irsend SEND_ONCE LED_24_KEY OFF", shell=True)
-
-run()

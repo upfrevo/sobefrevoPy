@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 canais_ruidos = []
 sons_ruidos = []

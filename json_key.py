@@ -1,9 +1,8 @@
-import os, random
+import os, random, sys
+sys.path.insert(0, "libs")
+import audio as AUDIO
 
 # utilizando  o json de resposta
-
-#result = visual_recognition.classify(images_file=image_file, threshold=0, classifier_ids=['Grupo_1351703499','Cores_741726174'])
-
 result = {
    "custom_classes": 5,
    "images": [
@@ -48,6 +47,8 @@ result = {
    "images_processed": 1
 }
 
+dir = ""
+
 def getCor(coresClasses):
     cor = ""
     if coresClasses[0]['score'] >= coresClasses[1]['score']:
@@ -83,8 +84,26 @@ def getKey(result):
         
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
     musicas = os.listdir("audios/Musicas/" + dir)
+    lista_ruidos = os.listdir("audios/Ruidos/")
     
-    return random.choice(musicas)
+    musica = "audios/Musicas/" + dir + "/" + random.choice(musicas)
+    ruidos = random.sample(lista_ruidos, 1);
+    concat_ruidos = []
+    
+    for ruido in ruidos:
+        concat_ruidos.append("audios/Ruidos/" + ruido)
+    
+    return [musica, concat_ruidos]
 
-audioKey = getKey(result)
-print(audioKey)
+audio_key = getKey(result)
+
+try:
+    AUDIO.init(3)
+    AUDIO.prepare(audio_key[0], audio_key[1])
+    AUDIO.play_trilha(True)
+    AUDIO.play_ruido(0, True)
+    AUDIO.play_ruido_random()
+    
+except:
+    print('erro')
+    
