@@ -40,6 +40,7 @@ def getKey(result):
     grupoKey = getGrupo(grupoClasses)
         
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
+    print(dir)
     musicas = os.listdir("audios/Musicas/" + dir)
     lista_ruidos = os.listdir("audios/Ruidos/")
     efeito_led = getEfeitoLed(dir)

@@ -7,7 +7,7 @@ musica_trilha = pygame.mixer.music
 sons_tocados = []
 
 def init(canais):
-    pygame.mixer.init(frequency = 44100, size = -16, channels = canais) 
+    pygame.mixer.init(frequency = 44100, size = -16, channels = canais)
 
 def prepare(trilha, ruidos):
     musica_trilha.load(trilha)

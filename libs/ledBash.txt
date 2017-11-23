@@ -1,0 +1,5 @@
+ON|1
+GREEN|3
+RED|5
+OFF|0
+
