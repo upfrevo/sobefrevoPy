@@ -108,7 +108,7 @@ try:
     time.sleep(2)
     turn_led_on()
     AUDIO.init(8)
-    BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
+    #BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
     setup_log()
     th = None
     count = 1
@@ -125,6 +125,7 @@ try:
             try:                
                 if (th != None):
                     th.terminate()
+                    
                 LED.off()
                 AUDIO.stop_all()
                 AUDIO.prepare(classificador[0], classificador[1])
@@ -147,4 +148,4 @@ except:
     GPIO.cleanup()
     cam.stop()
     LED.off()
-    BEACONS.destroy()
+    #BEACONS.destroy()
