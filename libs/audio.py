@@ -1,4 +1,5 @@
 import pygame, random
+from threading import Timer
 
 canais_ruidos = []
 sons_ruidos = []
@@ -50,8 +51,10 @@ def play_ruido_random():
             indice = random.randint(0, get_quantidade_ruidos() - 1)
         else:
             sons_tocados.remove(indice)
-    
-    play_ruido(indice, False)
+    sons_tocados.append(indice)
+    timer = random.randint(0, 10)
+    Timer(timer, play_ruido, (indice, False,)).start()
+    #play_ruido(indice, False)
 
 def som_tocando(indice):
     result = canais_ruidos[indice].get_busy()
@@ -65,8 +68,7 @@ def stop_all():
     
 #como utilizar
 #init(canais = 2)
-#prepare(trilha = "frevo.wav", ruidos = ["apito.wav", "clarim.wav"])
+#prepare(trilha = "../audios/Musicas/Frio_Grupo_Despojado/fria_grupo_despojado_opbh_frevando_em_paris_01.mp3", ruidos = ["../audios/Ruidos/apito.wav", "../audios/Ruidos/chasdog.wav"])
 #play_trilha(repete = True)
-#play_ruido(indice=0, force_play=True)
 #play_ruido_random()
-#stop_all()
+#play_ruido_random()
