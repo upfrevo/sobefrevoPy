@@ -1,12 +1,18 @@
-import os, random
+import os, random, re
 
 dir = ""
 
-def getEfeitoLed(dir):    
+def getEfeitoLed(dir, midnight=False):    
     lista_efeitos = os.listdir("efeitos_led/" + dir)
-    return "efeitos_led/" + dir + "/" + random.choice(lista_efeitos);
+    
+    efeito = "efeitos_led/" + dir + "/" + random.choice(lista_efeitos);
 
-def getCor(coresClasses):
+    if (midnight == True):
+        efeito = "efeitos_led/homem_meia_noite.txt"
+    
+    return efeito
+
+def getCor(coresClasses):    
     cor = ""
     if coresClasses[0]['score'] >= coresClasses[1]['score']:
          cor = coresClasses[0]['class']   
@@ -15,7 +21,7 @@ def getCor(coresClasses):
     
     return cor
 
-def getGrupo(grupoClasses):
+def getGrupo(grupoClasses):    
     grupo = ""
     if grupoClasses[0]['score'] >= grupoClasses[1]['score'] and grupoClasses[0]['score'] >= grupoClasses[2]['score']:
         grupo = grupoClasses[0]['class']
@@ -26,29 +32,119 @@ def getGrupo(grupoClasses):
         
     return grupo
     
+def checkMusica(musica):    
+    pos = musica.find("homem_da_meia_noite")
+    
+    if pos != -1:
+        return True
+    
+    return False
 
-def getKey(result):
+def isIndividual(dir):
+    pos = dir.find("Individual")
     
-    coresKey = ""
-    grupoKey = ""
+    if pos != -1:
+        return True
+    
+    return False
+
+def isGrupo(dir):
+    pos = dir.find("Grupo")
+    
+    if pos != -1:
+        return True
+    
+    return False
+
+def isPar(dir):
+    pos = dir.find("Par")
+    
+    if pos != -1:
+        return True
+    
+    return False
+
+def getRuidos(lista, dir):
+    lista_ruidos = []
+    
+    is_individual = isIndividual(dir)
+    is_grupo = isGrupo(dir)    
+    
+    if (is_individual == True):
+        entrevistas = random.sample(lista['entrevistas'], 1);
+        for entr in entrevistas:
+            lista_ruidos.append(["audios/Entrevistas/" + entr, getVolumeRuido(dir)])
+
+    elif (is_grupo == True):
+        ruidos = random.sample(lista['ruidos'], 3);        
+        for ruido in ruidos:            
+            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolume(dir)])
+
+        burburinho = random.sample(lista['burburinhos'], 1);        
+        lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir)])
+        
+    else:
+        ruidos = random.sample(lista['ruidos'], 3);        
+        for ruido in ruidos:            
+            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolume(dir)])
+
+        burburinho = random.sample(lista['burburinhos'], 1);        
+        lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir)])
+    
+    return lista_ruidos
+            
+def getMusica(musicas, dir):
+    return "audios/Musicas/" + dir + "/" + random.choice(musicas)
+
+def getRandom(min, max):
+    return random.uniform(min, max)
+
+def getVolumeTrilha(dir):    
+    volume = 1.0    
+    if (isIndividual(dir) == True):        
+        volume = getRandom(0.1, 0.3)
+    
+    print("trilha")
+    print(volume)
+    return volume
+
+def getVolumeRuido(dir):    
+    volume = 0.5
+    if (isIndividual(dir) == True):    
+        volume = 1.0
+    
+    print("ruido")
+    print(volume)
+    return volume
+
+
+def getKey(result):    
+    coresKey = "Frio"
+    grupoKey = "Individual"
     objetoKey = "Despojado"
-    coresClasses = result['images'][0]['classifiers'][0]['classes']
-    grupoClasses = result['images'][0]['classifiers'][1]['classes']
-    
-    # get Cores    
-    coresKey = getCor(coresClasses)            
-    grupoKey = getGrupo(grupoClasses)
+    #coresClasses = result['images'][0]['classifiers'][0]['classes']
+    #grupoClasses = result['images'][0]['classifiers'][1]['classes']        
+     
+    #coresKey = getCor(coresClasses)            
+    #grupoKey = getGrupo(grupoClasses)
         
-    dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)
-    print(dir)
+    dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)    
+    
     musicas = os.listdir("audios/Musicas/" + dir)
-    lista_ruidos = os.listdir("audios/Ruidos/")
-    efeito_led = getEfeitoLed(dir)
-    musica = "audios/Musicas/" + dir + "/" + random.choice(musicas)
-    ruidos = random.sample(lista_ruidos, 1);
-    concat_ruidos = []
     
-    for ruido in ruidos:
-        concat_ruidos.append("audios/Ruidos/" + ruido)
-        
-    return [musica, concat_ruidos, efeito_led]    
+    lista = {
+        "ruidos": os.listdir("audios/Ruidos/"),
+        "entrevistas": os.listdir("audios/Entrevistas/"),
+        "burburinhos": os.listdir("audios/Burburinhos/")
+    }
+    
+    musica = [getMusica(musicas, dir), getVolumeTrilha(dir)]
+    midnight_man = checkMusica(musica[0])    
+    
+    efeito_led = getEfeitoLed(dir, midnight_man)    
+    
+    ruidos = getRuidos(lista, dir)
+
+    print(musica, ruidos, efeito_led)
+    
+    return [musica, ruidos, efeito_led]    

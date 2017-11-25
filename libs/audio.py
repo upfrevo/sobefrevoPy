@@ -10,12 +10,16 @@ sons_tocados = []
 def init(canais):
     pygame.mixer.init(frequency = 44100, size = -16, channels = canais)
 
-def prepare(trilha, ruidos):
-    musica_trilha.load(trilha)
+def prepare(trilha, ruidos):    
+    musica_trilha.load(trilha[0])
+    musica_trilha.set_volume(trilha[1])
+
     i = 0;
     for ruido in ruidos:
         canais_ruidos.append(pygame.mixer.Channel(i))
-        sons_ruidos.append(pygame.mixer.Sound(ruidos[i]))
+        somRuido = pygame.mixer.Sound(ruidos[i][0])
+        somRuido.set_volume(ruidos[i][1])
+        sons_ruidos.append(somRuido)
         caminhos_ruidos.append(ruido)
         i = i + 1
 
@@ -52,8 +56,8 @@ def play_ruido_random():
         else:
             sons_tocados.remove(indice)
     sons_tocados.append(indice)
-    timer = random.randint(0, 10)
-    Timer(timer, play_ruido, (indice, False,)).start()
+    timer = random.randint(1, 20)
+    Timer(timer, play_ruido, (indice, True,)).start()
     #play_ruido(indice, False)
 
 def som_tocando(indice):
