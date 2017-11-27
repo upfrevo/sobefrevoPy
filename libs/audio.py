@@ -55,8 +55,10 @@ def play_ruido_random():
             indice = random.randint(0, get_quantidade_ruidos() - 1)
         else:
             sons_tocados.remove(indice)
-    sons_tocados.append(indice)
-    timer = random.randint(1, 20)
+
+    sons_tocados.append(indice)    
+    timer = random.uniform(0.5, 20)
+		
     Timer(timer, play_ruido, (indice, True,)).start()
     #play_ruido(indice, False)
 

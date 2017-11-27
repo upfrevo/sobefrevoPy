@@ -31,6 +31,15 @@ def getGrupo(grupoClasses):
         grupo = grupoClasses[2]['class']
         
     return grupo
+
+def getObjeto(objetoClasses):
+    objeto = ""
+    if objetoClasses[0]['score'] >= objetoClasses[1]['score']:
+         objeto = objetoClasses[0]['class']   
+    else:
+         objeto = objetoClasses[1]['class']
+    
+    return objeto
     
 def checkMusica(musica):    
     pos = musica.find("homem_da_meia_noite")
@@ -73,20 +82,11 @@ def getRuidos(lista, dir):
     if (is_individual == True):
         entrevistas = random.sample(lista['entrevistas'], 1);
         for entr in entrevistas:
-            lista_ruidos.append(["audios/Entrevistas/" + entr, getVolumeRuido(dir)])
-
-    elif (is_grupo == True):
-        ruidos = random.sample(lista['ruidos'], 3);        
-        for ruido in ruidos:            
-            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolume(dir)])
-
-        burburinho = random.sample(lista['burburinhos'], 1);        
-        lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir)])
-        
+            lista_ruidos.append(["audios/Entrevistas/" + entr, getVolumeRuido(dir)])    
     else:
         ruidos = random.sample(lista['ruidos'], 3);        
         for ruido in ruidos:            
-            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolume(dir)])
+            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolumeRuido(dir)])
 
         burburinho = random.sample(lista['burburinhos'], 1);        
         lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir)])
@@ -102,14 +102,14 @@ def getRandom(min, max):
 def getVolumeTrilha(dir):    
     volume = 1.0    
     if (isIndividual(dir) == True):        
-        volume = getRandom(0.1, 0.3)
+        volume = getRandom(0.05, 0.06)
     
     print("trilha")
     print(volume)
     return volume
 
 def getVolumeRuido(dir):    
-    volume = 0.5
+    volume = getRandom(0.5, 0.7)
     if (isIndividual(dir) == True):    
         volume = 1.0
     
@@ -119,14 +119,17 @@ def getVolumeRuido(dir):
 
 
 def getKey(result):    
-    coresKey = "Frio"
-    grupoKey = "Individual"
-    objetoKey = "Despojado"
-    #coresClasses = result['images'][0]['classifiers'][0]['classes']
-    #grupoClasses = result['images'][0]['classifiers'][1]['classes']        
+    coresKey = ""
+    grupoKey = ""
+    objetoKey = ""
+
+    coresClasses = result['images'][0]['classifiers'][0]['classes']
+    grupoClasses = result['images'][0]['classifiers'][1]['classes']
+    objetoClasses = result['images'][0]['classifiers'][2]['classes']    
      
-    #coresKey = getCor(coresClasses)            
-    #grupoKey = getGrupo(grupoClasses)
+    coresKey = getCor(coresClasses)            
+    grupoKey = getGrupo(grupoClasses)
+    objetoKey = getObjeto(objetoClasses)
         
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)    
     
@@ -147,4 +150,6 @@ def getKey(result):
 
     print(musica, ruidos, efeito_led)
     
-    return [musica, ruidos, efeito_led]    
+    ruido_comeco = isIndividual(dir)
+    
+    return [musica, ruidos, efeito_led, ruido_comeco]    

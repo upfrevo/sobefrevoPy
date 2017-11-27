@@ -27,9 +27,6 @@ pygame.camera.init()
 cam = pygame.camera.Camera("/dev/video0",(1920,1080))
 cam.start()
 visual_recognition = VisualRecognitionV3('2016-05-20', api_key='3c840f761086ca39e0a41c02bb8bf119f96f27ce')
-estado_inicial = False
-andar_atual = -1
-
 
 def distance():
     GPIO.output(GPIO_TRIGGER, False)
@@ -75,7 +72,7 @@ def capture(count, flip):
 
 def send_to_watson(image):
     with open(image, 'rb') as image_file:
-        parameters = json.dumps({'threshold': 0, 'classifier_ids': ['Grupo_1351703499','Cores_741726174']})
+        parameters = json.dumps({'threshold': 0, 'classifier_ids': ['Grupo_1351703499','Cores_445328997', 'Vestimenta_1354780568']})
         try:
             return visual_recognition.classify(images_file=image_file, parameters=parameters)
         except:
@@ -99,76 +96,93 @@ def setup_log():
     root.addHandler(handler)
 
 def callback_beacons(bt_addr, rssi, packet, additional_info):
-    if packet.uuid == BEACONS.UUID_BLUE:
-      print("Voce esta no terceiro andar")
-      if andar_atual != 3:
-        estado_incial = True
+  global andar_atual, estado_inicial
+  if (packet.uuid == BEACONS.UUID_BLUE):    
+    if (andar_atual != 3):
+      print("Voce chegou no terceiro andar")
+      estado_inicial = True      
       andar_atual = 3
-    elif packet.uuid == BEACONS.UUID_PURPLE:
-      print("Voce esta no segundo andar")
-      andar_atual = 2
-    elif packet.uuid == BEACONS.UUID_GREEN:
-      print("Voce esta no primeiro andar")
-      if andar_atual != 1:
-        estado_inicial = True
+      
+  elif (packet.uuid == BEACONS.UUID_GREEN):    
+    if (andar_atual != 1):
+      print("Voce chegou no primeiro andar")
+      estado_inicial = False
       andar_atual = 1
-    elif packet.uuid == BEACONS.UUID_BISCUI:
-      if andar_atual != 0:
-        estado_inicial = True
+        
+  elif (packet.uuid == BEACONS.UUID_PURPLE):    
+    if (andar_atual != 0):
+      print("Voce chegou no terreo")
+      estado_inicial = True
       andar_atual = 0
-      print("Voce esta no biscui")
-
+      
 def main():
+    global andar_atual, estado_inicial
+    andar_atual = -1
+    estado_inicial = False
     time.sleep(2)
     turn_led_on()
     AUDIO.init(8)
-    #BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
+    BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
     setup_log()
     th = None
     count = 1
-    while True:
-        if GPIO.input(GPIO_PIR):
-            print("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-            #dist = distance()
-            #print ("Measured Distance = %.1f cm" % dist)
-            #if dist >=30 and dis,t <= 100:
-            watson_json = capture(count, True)
-            
-            classificador = CC.getKey(watson_json)
-            
-            print("Conteudo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    distancia = -1;
+    cont_dist = 0;
+    while True:        
+        if estado_inicial == True:
+            time.sleep(2)
+            LED.off()
+            AUDIO.stop_all()
+            time.sleep(2)
+            distancia = distance()
+            #print ("distancia {}".format(distancia))
+            if GPIO.input(GPIO_PIR) and distancia < 70:
+                estado_inicial = False
+                print("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                #dist = distance()
+                #print ("Measured Distance = %.1f cm" % dist)
+                #if dist >=30 and dis,t <= 100:
+                watson_json = capture(count, True)
+                print("Recebeu json Watson - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                
+                classificador = CC.getKey(watson_json)
+                
+                print("Conteudo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
 
-            try: 
-                if (th != None):
-                    th.terminate()
-                        
-                AUDIO.stop_all()
-                AUDIO.prepare(classificador[0], classificador[1])
+                try:
+                    if (th != None):
+                        th.terminate()
 
-                time.sleep(1)
+                    AUDIO.stop_all()
+                    AUDIO.prepare(classificador[0], classificador[1])
+                    LED.run(classificador[2])
+                    time.sleep(1)
 
-                AUDIO.play_trilha(True)
+                    AUDIO.play_trilha(True)
 
-                for ruido in classificador[1]:
-                    AUDIO.play_ruido_random()
-                        
-                    #th = multiprocessing.Process(target=LED.run, args = (classificador[2],))
-                    #print("Starting new Thread");
-                    #th.start()
-                        
-                count = count + 1
-                time.sleep(2)
-            except:
-                print('Erro ao executar exibicao de conteudo!')
+                    for ruido in classificador[1]:
+                        if(classificador[3] == False):
+                            AUDIO.play_ruido_random()
+                        else:
+                            AUDIO.play_ruido(AUDIO.get_indice_ruido(ruido), True)
 
+                        #th = multiprocessing.Process(target=LED.run, args = (classificador[2],))
+                        #print("Starting new Thread");
+                        #th.start()
+
+                    count = count + 1
+                    time.sleep(2)
+                except:
+                    print('Erro ao executar exibicao de conteudo!')
+                    
 def restart():
     print("Fim... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     print('Erro catastrofico')
     GPIO.cleanup()
     cam.stop()
     AUDIO.stop_all()
-    #LED.off()
-    #BEACONS.destroy()
+    LED.off()
+    BEACONS.destroy()
     main()
 
 try:
