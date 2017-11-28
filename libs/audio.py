@@ -1,10 +1,12 @@
-import pygame, random
+import pygame, random , os
 from threading import Timer
+
 
 canais_ruidos = []
 sons_ruidos = []
 caminhos_ruidos = []
 musica_trilha = pygame.mixer.music
+musica_freviana = pygame.mixer.music
 sons_tocados = []
 
 def init(canais):
@@ -28,6 +30,14 @@ def play_trilha(repete):
     if repete == True:
         rep = -1
     musica_trilha.play(rep)
+    
+def play_freviana(tipo):
+    musica_freviana.load(get_audio_freviana("audios/Freviana/" + tipo))
+    musica_freviana.play(0)
+    
+def get_audio_freviana(dir):
+    lista = os.listdir(dir)
+    return dir + "/" + random.choice(lista);
 
 def get_quantidade_ruidos():
     return len(caminhos_ruidos)

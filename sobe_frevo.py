@@ -67,7 +67,7 @@ def capture(count, flip):
     pygame.image.save(img,filename)
     print("Salvando Imagem {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
     blink_led()
-
+    time.sleep(1)
     return send_to_watson(filename)
 
 def send_to_watson(image):
@@ -119,7 +119,7 @@ def main():
     global andar_atual, estado_inicial
     andar_atual = -1
     estado_inicial = False
-    time.sleep(2)
+    time.sleep(1)
     turn_led_on()
     AUDIO.init(8)
     BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_GREEN,BEACONS.UUID_PURPLE],callback_beacons)
@@ -130,13 +130,15 @@ def main():
     cont_dist = 0;
     while True:        
         if estado_inicial == True:
-            time.sleep(2)
+            time.sleep(1)
             LED.off()
             AUDIO.stop_all()
-            time.sleep(2)
-            distancia = distance()
+            time.sleep(1)
+            distancia = 1
             #print ("distancia {}".format(distancia))
             if GPIO.input(GPIO_PIR) and distancia < 70:
+                AUDIO.play_freviana("Entrada")
+                time.sleep(2)
                 estado_inicial = False
                 print("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
                 #dist = distance()
@@ -183,9 +185,9 @@ def restart():
     AUDIO.stop_all()
     LED.off()
     BEACONS.destroy()
-    main()
+    #main()
 
-try:
-    main()
-except:
-    restart()
+#try:
+main()
+#except:
+#    restart()
