@@ -57,6 +57,14 @@ def isIndividual(dir):
     
     return False
 
+def isBurburinho(dir):
+    pos = dir.find("Burburinhos")
+    
+    if pos != -1:
+        return True
+    
+    return False
+
 def isGrupo(dir):
     pos = dir.find("Grupo")
     
@@ -82,14 +90,14 @@ def getRuidos(lista, dir):
     if (is_individual == True):
         entrevistas = random.sample(lista['entrevistas'], 1);
         for entr in entrevistas:
-            lista_ruidos.append(["audios/Entrevistas/" + entr, getVolumeRuido(dir)])    
+            lista_ruidos.append(["audios/Entrevistas/" + entr, getVolumeRuido(dir), False])    
     else:
         ruidos = random.sample(lista['ruidos'], 3);        
         for ruido in ruidos:            
-            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolumeRuido(dir)])
+            lista_ruidos.append(["audios/Ruidos/" + ruido, getVolumeRuido(dir), False])
 
         burburinho = random.sample(lista['burburinhos'], 1);        
-        lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir)])
+        lista_ruidos.append(["audios/Burburinhos/" + burburinho[0], getVolumeRuido(dir), True])
     
     return lista_ruidos
             
@@ -103,33 +111,33 @@ def getVolumeTrilha(dir):
     volume = 1.0    
     if (isIndividual(dir) == True):        
         volume = getRandom(0.05, 0.06)
-    
-    print("trilha")
-    print(volume)
+        
     return volume
 
 def getVolumeRuido(dir):    
-    volume = getRandom(0.5, 0.7)
+    volume = getRandom(0.3, 0.5)
     if (isIndividual(dir) == True):    
         volume = 1.0
-    
-    print("ruido")
-    print(volume)
+        
     return volume
 
 
-def getKey(result):    
+def getKey(result, randomico):    
     coresKey = ""
     grupoKey = ""
     objetoKey = ""
 
-    coresClasses = result['images'][0]['classifiers'][0]['classes']
-    grupoClasses = result['images'][0]['classifiers'][1]['classes']
-    objetoClasses = result['images'][0]['classifiers'][2]['classes']    
-     
-    coresKey = getCor(coresClasses)            
-    grupoKey = getGrupo(grupoClasses)
-    objetoKey = getObjeto(objetoClasses)
+    if not randomico:
+        coresClasses = result['images'][0]['classifiers'][0]['classes']
+        grupoClasses = result['images'][0]['classifiers'][1]['classes']
+        objetoClasses = result['images'][0]['classifiers'][2]['classes'] 
+        coresKey = getCor(coresClasses)            
+        grupoKey = getGrupo(grupoClasses)
+        objetoKey = getObjeto(objetoClasses)
+    else:
+        coresKey = random.choice(["Frio", "Quente"])
+        grupoKey = random.choice(["Individual","Par","Grupo"])
+        objetoKey = random.choice(["Formal", "Despojado"])
         
     dir = "{0}_{1}_{2}".format(coresKey,grupoKey,objetoKey)    
     
@@ -147,8 +155,6 @@ def getKey(result):
     efeito_led = getEfeitoLed(dir, midnight_man)    
     
     ruidos = getRuidos(lista, dir)
-
-    print(musica, ruidos, efeito_led)
     
     ruido_comeco = isIndividual(dir)
     

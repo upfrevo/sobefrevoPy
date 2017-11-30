@@ -8,11 +8,14 @@ caminhos_ruidos = []
 musica_trilha = pygame.mixer.music
 musica_freviana = pygame.mixer.music
 sons_tocados = []
+timers = []
+stop_flag = False
 
 def init(canais):
     pygame.mixer.init(frequency = 44100, size = -16, channels = canais)
 
-def prepare(trilha, ruidos):    
+def prepare(trilha, ruidos):
+    stop_flag = False
     musica_trilha.load(trilha[0])
     musica_trilha.set_volume(trilha[1])
 
@@ -33,6 +36,7 @@ def play_trilha(repete):
     
 def play_freviana(tipo):
     musica_freviana.load(get_audio_freviana("audios/Freviana/" + tipo))
+    musica_freviana.set_volume(1)
     musica_freviana.play(0)
     
 def get_audio_freviana(dir):
@@ -51,11 +55,12 @@ def get_indice_ruido(caminho_ruido):
     return i
         
 def play_ruido(indice, force_play):
-    if force_play == True:
-        canais_ruidos[indice].stop()
-    #sons_tocados.append(indice) 
-    #if not som_tocando(indice):
-    canais_ruidos[indice].play(sons_ruidos[indice])
+    if not stop_flag:
+        if force_play == True:
+            canais_ruidos[indice].stop()
+        #sons_tocados.append(indice) 
+        #if not som_tocando(indice):
+        canais_ruidos[indice].play(sons_ruidos[indice])
 
 def play_ruido_random():
     indice = random.randint(0, get_quantidade_ruidos() - 1)
@@ -69,7 +74,7 @@ def play_ruido_random():
     sons_tocados.append(indice)    
     timer = random.uniform(0.5, 20)
 		
-    Timer(timer, play_ruido, (indice, True,)).start()
+    timers.append(Timer(timer, play_ruido, (indice, True,)).start())
     #play_ruido(indice, False)
 
 def som_tocando(indice):
@@ -78,10 +83,22 @@ def som_tocando(indice):
 
 def stop_all():
     random_tocado = []
-    musica_trilha.stop()
+    musica_trilha.fadeout(500)
+    
     for canal in canais_ruidos:
         canal.stop()
-    
+
+    for som_ruido in sons_ruidos:
+        som_ruido.set_volume(0)    
+        
+def freviana_tocando():
+    return musica_freviana.get_busy()
+
+def freviana_tempo():
+    return musica_freviana.get_pos()
+
+def trilha_tocando():
+    return musica_trilha.get_busy()
 #como utilizar
 #init(canais = 2)
 #prepare(trilha = "../audios/Musicas/Frio_Grupo_Despojado/fria_grupo_despojado_opbh_frevando_em_paris_01.mp3", ruidos = ["../audios/Ruidos/apito.wav", "../audios/Ruidos/chasdog.wav"])
