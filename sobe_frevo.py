@@ -12,14 +12,8 @@ import beacon as BEACONS
 import envio_email
 import log_util
 
-<<<<<<< HEAD
-log_util.ini()
 gc.enable()
-=======
 log_util.init()
-
->>>>>>> 479bcfb489ca44087b3e3f0ff82b287b30b4a634
-
 
 try:
     delay_f = float(sys.argv[1])
