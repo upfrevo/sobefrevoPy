@@ -9,6 +9,7 @@ import audio as AUDIO
 import led as LED
 import classificador_conteudo as CC
 import beacon as BEACONS
+import envio_email
 
 try:
     delay_f = float(sys.argv[1])
@@ -236,9 +237,10 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
 def destroy():
     print("Fim... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     print('Erro catastrofico')
-    GPIO.cleanup()
-    cam.stop()
+    envio_email.envia_email("Destroy chamado", nsg)
     finaliza_experiencia(0, False)
+    GPIO.cleanup()
+    cam.stop()    
     BEACONS.destroy()
 
 def restart():
@@ -248,5 +250,7 @@ def restart():
 try:    
     main(delay_foto = delay_f, tempo_despedida = tempo_d, espera_vazio = espera_v, salva_imagem = salva_i, flip_imagem = flip_i, distancia_minima = dist_m, canais_de_som = canais)
 except Exception as e:
-    print("")
+    msg = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + ' - ' + str(e)
+    logging.exception(msg)
+    envio_email.envia_email("Exceção no sistema", nsg)
     restart()
