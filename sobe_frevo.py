@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys, pygame.camera, os, datetime
+import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys, pygame.camera, os, datetime, gc
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
 
@@ -13,7 +13,7 @@ import envio_email
 import log_util
 
 log_util.ini()
-
+gc.enable()
 
 
 try:
@@ -83,9 +83,11 @@ def distance():
 def capture(count, flip, salva_imagem):
     log_util.log_info("Tirando foto")
     #print("Tirando Foto... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    i = count
     if not salva_imagem:
-        count = 1
-    filename = './samples/sample{}.jpg'.format(count)
+        i = 1 
+    
+    filename = './samples/sample{}.jpg'.format(i)
     img = cam.get_image()
 
     if flip == True:
@@ -167,7 +169,9 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
     distancia = -1
     cont_dist = 0
     ultimo_tempo_movimento = datetime.datetime.now()
-    while True:        
+    while True:
+        if (count % 10 == 0)
+            gc.collect()
         if estado_inicial == True:
             tempo_ultimo_beacon = datetime.datetime.now()
             finaliza_experiencia(tempo_despedida, True)
