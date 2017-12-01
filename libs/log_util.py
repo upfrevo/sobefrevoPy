@@ -17,7 +17,3 @@ def init():
     root.setLevel(os.environ.get("LOGLEVEL", "INFO"))
     root.addHandler(handler)
 
-init()
-log_info("teste")
-
-log_excecao("teste excessao")
