@@ -12,7 +12,7 @@ import beacon as BEACONS
 import envio_email
 import log_util
 
-log_util.ini()
+log_util.init()
 
 
 
