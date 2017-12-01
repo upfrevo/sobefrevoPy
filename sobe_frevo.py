@@ -169,7 +169,7 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
     cont_dist = 0
     ultimo_tempo_movimento = datetime.datetime.now()
     while True:
-        if (count % 10 == 0)
+        if (count % 10 == 0):
             gc.collect()
         if estado_inicial == True:
             tempo_ultimo_beacon = datetime.datetime.now()
