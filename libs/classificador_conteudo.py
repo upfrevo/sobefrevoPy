@@ -110,12 +110,12 @@ def getRandom(min, max):
 def getVolumeTrilha(dir):    
     volume = 1.0    
     if (isIndividual(dir) == True):        
-        volume = getRandom(0.05, 0.06)
+        volume = getRandom(0.1, 0.2)
         
     return volume
 
 def getVolumeRuido(dir):    
-    volume = getRandom(0.3, 0.5)
+    volume = getRandom(0.5, 0.65)
     if (isIndividual(dir) == True):    
         volume = 1.0
         
