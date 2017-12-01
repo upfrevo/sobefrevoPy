@@ -1,7 +1,6 @@
 import pygame, random , os
 from threading import Timer
 
-
 canais_ruidos = []
 sons_ruidos = []
 caminhos_ruidos = []
@@ -99,6 +98,10 @@ def freviana_tempo():
 
 def trilha_tocando():
     return musica_trilha.get_busy()
+
+def set_volume_trilha(volume):
+    musica_trilha.set_volume(volume)
+
 #como utilizar
 #init(canais = 2)
 #prepare(trilha = "../audios/Musicas/Frio_Grupo_Despojado/fria_grupo_despojado_opbh_frevando_em_paris_01.mp3", ruidos = ["../audios/Ruidos/apito.wav", "../audios/Ruidos/chasdog.wav"])

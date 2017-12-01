@@ -227,6 +227,9 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
             dif = agora - ultimo_tempo_movimento
             delta = int(dif.total_seconds())
             if AUDIO.trilha_tocando():
+                if (classificador[3] and not AUDIO.som_tocando(0)):
+                    AUDIO.set_volume_trilha(1)
+                
                 if GPIO.input(GPIO_PIR):
                     ultimo_tempo_movimento = datetime.datetime.now()
                 elif delta >= espera_vazio:

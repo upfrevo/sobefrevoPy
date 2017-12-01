@@ -110,7 +110,7 @@ def getRandom(min, max):
 def getVolumeTrilha(dir):    
     volume = 1.0    
     if (isIndividual(dir) == True):        
-        volume = getRandom(0.1, 0.2)
+        volume = getRandom(0.15, 0.25)
         
     return volume
 
