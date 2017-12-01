@@ -5,7 +5,7 @@ remetente    = 'sobefrevo@gmail.com'
 senha        = 'watsonfrevo2017'
  
 # Informações da mensagem
-destinatario = 'jpataide@gmail.com'
+destinatario = 'sobefrevo@gmail.com'
 
 def envia_email(assunto, mensagem):     
     # Preparando a mensagem

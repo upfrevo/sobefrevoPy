@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys, pygame.camera, logging, logging.handlers, os, datetime
+import RPi.GPIO as GPIO, time, pygame, json, multiprocessing, sys, pygame.camera, os, datetime
 from os.path import join, dirname
 from watson_developer_cloud import VisualRecognitionV3
 
@@ -10,6 +10,11 @@ import led as LED
 import classificador_conteudo as CC
 import beacon as BEACONS
 import envio_email
+import log_util
+
+log_util.ini()
+
+
 
 try:
     delay_f = float(sys.argv[1])
@@ -20,12 +25,15 @@ try:
     dist_m = int(sys.argv[6])
     canais = int(sys.argv[7])
 except Exception as e:
-    print("Erro: Você recisa passar todos os 7 argumentos: Delay de foto, Tempo de despedida, Tempo de espera elevador vazio, Salvar imagens, Inverter imagem, Distancia minima, Canais de audio")
+    log_util.log_excecao("Erro: Você recisa passar todos os 7 argumentos: Delay de foto, Tempo de despedida, Tempo de espera elevador vazio, Salvar imagens, Inverter imagem, Distancia minima, Canais de audio")
+    
     sys.exit()
 
-print("Modo selecionado: \nDelay de foto: {}\nTempo de despedida: {}\nTempo de espera elevador vazio: {}\nSalvar imagens: {}\nInverter imagem: {}\nDistancia minima: {}\nCanais de audio: {}".format(delay_f, tempo_d, espera_v, salva_i, flip_i, dist_m, canais))
+log_util.log_info("Modo selecionado: \nDelay de foto: {}\nTempo de despedida: {}\nTempo de espera elevador vazio: {}\nSalvar imagens: {}\nInverter imagem: {}\nDistancia minima: {}\nCanais de audio: {}".format(delay_f, tempo_d, espera_v, salva_i, flip_i, dist_m, canais))
+#print("Modo selecionado: \nDelay de foto: {}\nTempo de despedida: {}\nTempo de espera elevador vazio: {}\nSalvar imagens: {}\nInverter imagem: {}\nDistancia minima: {}\nCanais de audio: {}".format(delay_f, tempo_d, espera_v, salva_i, flip_i, dist_m, canais))
 
-print("Init - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+log_util.log_info("Init")
+#print("Init - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
 #set GPIO Pins
 GPIO.setmode(GPIO.BCM)
 GPIO_TRIGGER = 22
@@ -73,7 +81,8 @@ def distance():
     return distance
 
 def capture(count, flip, salva_imagem):
-    print("Tirando Foto... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    log_util.log_info("Tirando foto")
+    #print("Tirando Foto... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     if not salva_imagem:
         count = 1
     filename = './samples/sample{}.jpg'.format(count)
@@ -83,7 +92,8 @@ def capture(count, flip, salva_imagem):
         img = pygame.transform.flip(img,False,True)
 
     pygame.image.save(img,filename)
-    print("Salvando Imagem {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
+    log_util.log_info("Salvando Imagem")
+    #print("Salvando Imagem {}... - {}".format(filename,time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())))
     blink_led()
     return send_to_watson(filename, count, flip, salva_imagem)
 
@@ -103,26 +113,17 @@ def blink_led():
     time.sleep(0.1)
     GPIO.output(GPIO_LED,True)
 
-def setup_log():
-    handler = logging.handlers.WatchedFileHandler(
-    os.environ.get("LOGFILE", "logs/LOG{}.log".format(time.strftime("_%Y_%m_%d"))))
-    formatter = logging.Formatter(logging.BASIC_FORMAT)
-    handler.setFormatter(formatter)
-    root = logging.getLogger()
-    root.setLevel(os.environ.get("LOGLEVEL", "INFO"))
-    root.addHandler(handler)
-
 def callback_beacons(bt_addr, rssi, packet, additional_info):
   global andar_atual, estado_inicial, tempo_ultimo_beacon
   agora = datetime.datetime.now()
   dif = agora - tempo_ultimo_beacon
   delta = int(dif.total_seconds())
-  print("delta: {}".format(delta))
 
   if (packet.uuid == BEACONS.UUID_BLUE):
     dif = agora - tempo_ultimo_beacon
     if (andar_atual != 3) or (delta > 30):
-      print("Voce chegou no terceiro andar")
+      log_util.log_info("Voce chegou no terceiro andar")
+      #print("Voce chegou no terceiro andar")
       estado_inicial = True
       tempo_ultimo_beacon = agora
       andar_atual = 3
@@ -135,7 +136,8 @@ def callback_beacons(bt_addr, rssi, packet, additional_info):
 
   elif (packet.uuid == BEACONS.UUID_PURPLE):    
     if (andar_atual != 0) or (delta > 25):
-      print("Voce chegou no terreo")
+      log_util.log_info("Voce chegou no terreo")
+      #print("Voce chegou no terreo")
       estado_inicial = True
       tempo_ultimo_beacon = agora
       andar_atual = 0
@@ -161,7 +163,6 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
     turn_led_on()
     AUDIO.init(canais_de_som)
     BEACONS.init([BEACONS.UUID_BLUE,BEACONS.UUID_PURPLE],callback_beacons)
-    setup_log()
     count = 1
     distancia = -1
     cont_dist = 0
@@ -177,7 +178,8 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
                 distancia = distance()
             
             if GPIO.input(GPIO_PIR) and distancia <= distancia_minima:
-                print("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                log_util.log_info("Movimento Detectado")
+                #print("Movimento Detectado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
                 AUDIO.play_freviana("Entrada")
                 estado_inicial = False
                 time.sleep(delay_foto)
@@ -186,18 +188,22 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
                 
                 try:
                     watson_json = capture(count, flip_imagem, salva_imagem)
-                    print("Recebeu json Watson - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                    #print("Recebeu json Watson - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                    log_util.log_info("Recebeu json Watson")
                     if watson_json != None:
                         classificador = CC.getKey(watson_json, False)
                     else:
                         classificador = CC.getKey("", True)
-                        print("Classificador randomico: {}".format(classificador))
+                        log_util.log_info("Classificador randomico")
+                        #print("Classificador randomico: {}".format(classificador))
                 except Exception as e:                    
                     print(str(e))
                     classificador = CC.getKey("", True)
-                    print("Classificador randomico: {}".format(classificador))
+                    log_util.log_info("Classificador randomico")
+                    log_util.log_excecao(str(e))
                 
-                print("Conteudo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                log_util.log_info("Conteudo Selecionado")
+                #print("Conteudo Selecionado - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
 
                 try:
                     AUDIO.stop_all()
@@ -220,7 +226,8 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
                     count = count + 1
                 except Exception as e:
                     s = str(e)
-                    print('Erro ao executar exibicao de conteudo: ' + s)
+                    log_util.log_excessao(s)
+                    #print('Erro ao executar exibicao de conteudo: ' + s)
 
         else:
             agora = datetime.datetime.now()
@@ -233,13 +240,15 @@ def main(delay_foto, tempo_despedida, espera_vazio, salva_imagem, flip_imagem, d
                 if GPIO.input(GPIO_PIR):
                     ultimo_tempo_movimento = datetime.datetime.now()
                 elif delta >= espera_vazio:
-                    print("Finalizando por falta de movimento - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+                    log_util.log_info("Finalizando por falta de movimento")
+                    #print("Finalizando por falta de movimento - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
                     andar_atual = -1
                     finaliza_experiencia(tempo_despedida, True)
                     
 def destroy():
-    print("Fim... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
-    print('Erro catastrofico')
+    log_util.log_info("Fim...")
+    #print("Fim... - " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+    #print('Erro catastrofico')
     envio_email.envia_email("Destroy chamado", nsg)
     finaliza_experiencia(0, False)
     GPIO.cleanup()
@@ -253,7 +262,5 @@ def restart():
 try:    
     main(delay_foto = delay_f, tempo_despedida = tempo_d, espera_vazio = espera_v, salva_imagem = salva_i, flip_imagem = flip_i, distancia_minima = dist_m, canais_de_som = canais)
 except Exception as e:
-    msg = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + ' - ' + str(e)
-    logging.exception(msg)
-    envio_email.envia_email("Exceção no sistema", nsg)
+    log_util.log_excecao(str(e))
     restart()
