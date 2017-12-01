@@ -9,19 +9,29 @@ destinatario = 'sobefrevo@gmail.com'
 
 def envia_email(assunto, mensagem):     
     # Preparando a mensagem
-    msg = '\r\n'.join([
-      'From: %s' % remetente,
-      'To: %s' % destinatario,
-      'Subject: %s' % assunto,
-      '',
-      '%s' % mensagem
-      ])
-     
-    # Enviando o email
-    server = smtplib.SMTP('smtp.gmail.com:587')
-    server.starttls()
-    server.login(remetente,senha)
-    server.sendmail(remetente, destinatario, msg)
-    server.quit()
+    msg = MIMEMultipart()
+    msg['From'] = destinatario
+    
+    msg['To'] = destinatario
+    msg['Date'] = formatdate(localtime=True)
+    msg['Subject'] = assunto
+
+    arquivo_log = "logs/LOG{}.log".format(time.strftime("_%Y_%m_%d"))
+    try:
+        msg.attach(MIMEText(mensagem))
+        with open(arquivo_log, "rb") as fil:
+            part = MIMEApplication(
+                fil.read(),
+                Name=basename(f)
+            )
+            # After the file is closed
+            part['Content-Disposition'] = 'attachment; filename="%s"' % basename(f)
+            msg.attach(part)
+    finally: 
+        smtp = smtplib.SMTP('smtp.gmail.com:587')
+        smtp.starttls()
+        smtp.login(remetente,senha)
+        smtp.sendmail(remetente, destinatario, msg.as_string())
+        smtp.close()
 
     
